@@ -29,10 +29,19 @@ export default function DashboardPage() {
     <Container>
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4">Dashboard</Typography>
-        <Typography>Welcome, {session.user?.name}</Typography>
-        <Button variant="outlined" onClick={handleLogout} sx={{ mt: 2 }}>
-          Logout
-        </Button>
+        <Typography sx={{ mb: 2 }}>Welcome, {session.user?.name}</Typography>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button
+            variant="contained"
+            onClick={() => router.push("/dashboard/users")}
+          >
+            View Users
+          </Button>
+          <Button variant="outlined" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Box>
       </Box>
     </Container>
   );
