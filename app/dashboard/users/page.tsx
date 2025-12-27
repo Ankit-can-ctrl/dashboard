@@ -17,53 +17,28 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  gender: string;
-  phone: string;
-  company: { name: string };
-}
-
-interface UsersResponse {
-  users: User[];
-  total: number;
-}
+import { useUsersStore } from "@/store/userStore";
 
 export default function UsersPage() {
   const router = useRouter();
-  const [users, setUsers] = useState<User[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+
+  // Get state and actions from Zustand store
+  const { users, total, isLoading, fetchUsers, searchUsers } = useUsersStore();
+
+  // Local UI state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const limit = 10;
 
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      const skip = page * limit;
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/users?limit=${limit}&skip=${skip}`;
-
-      if (search) {
-        url = `${process.env.NEXT_PUBLIC_API_URL}/users/search?q=${search}&limit=${limit}&skip=${skip}`;
-      }
-
-      const res = await fetch(url);
-      const data: UsersResponse = await res.json();
-      setUsers(data.users);
-      setTotal(data.total);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-    }
-    setLoading(false);
-  };
-
+  // Fetch users using store actions
   useEffect(() => {
-    fetchUsers();
+    const skip = page * limit;
+
+    if (search) {
+      searchUsers(search);
+    } else {
+      fetchUsers(limit, skip);
+    }
   }, [page, search]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +63,7 @@ export default function UsersPage() {
           sx={{ mb: 3 }}
         />
 
-        {loading ? (
+        {isLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
             <CircularProgress />
           </Box>

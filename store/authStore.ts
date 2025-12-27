@@ -1,6 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+/*
+  WHY ZUSTAND?
+  - Simpler than Redux (no boilerplate)
+  - Tiny bundle size (~1KB)
+  - Built-in async actions (no middleware needed)
+  - Perfect for small-medium apps
+ */
+
 interface AuthState {
   token: string | null;
   setToken: (token: string) => void;

@@ -38,6 +38,12 @@ export default function DashboardPage() {
           >
             View Users
           </Button>
+          <Button
+            variant="contained"
+            onClick={() => router.push("/dashboard/products")}
+          >
+            View Products
+          </Button>
           <Button variant="outlined" onClick={handleLogout}>
             Logout
           </Button>
